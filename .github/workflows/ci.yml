@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  editorconfig:
+    name: Editorconfig compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: editorconfig-checker/action-editorconfig-checker@v2
+
+  validate-godot-project:
+    name: Validate Godot project loads
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Godot 4.3
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0
+          use-dotnet: false
+      - name: Headless import check
+        run: godot --headless --path client --import --quit-after 60
+
+  validate-docker-compose:
+    name: Validate docker-compose config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Render compose config
+        run: |
+          cp infra/docker/.env.example infra/docker/.env
+          docker compose -f infra/docker/docker-compose.yml config -q
+
+  validate-sql-migrations:
+    name: Lint SQL migrations
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: warzone
+          POSTGRES_PASSWORD: ci_password
+          POSTGRES_DB: warzone
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U warzone"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply migrations against throwaway CI database
+        run: |
+          for f in server/db/postgres/migrations/*.up.sql; do
+            echo "Applying $f"
+            PGPASSWORD=ci_password psql -h localhost -U warzone -d warzone -f "$f"
+          done
+
+  run-gdscript-tests:
+    name: Run GDScript unit + integration tests (GUT)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Godot 4.3
+        uses: chickensoft-games/setup-godot@v2
+        with:
+          version: 4.3.0
+          use-dotnet: false
+      - name: Run GUT suite
+        run: ./tools/build-scripts/run_gdscript_tests.sh
+
+# NOTE: A job that builds server/modules/*/ TypeScript Nakama modules
+# will be added in Phase 5 once the first real module exists
+# (tools/build-scripts/build_server_modules.sh already handles the
+# "nothing to build yet" case cleanly for local dev in the meantime).

@@ -1,0 +1,30 @@
+# Local development configuration for Nakama.
+# Production configuration is managed separately (Phase 13+/infra/k8s)
+# and must never share secrets with this file.
+
+name: warzone-nakama-local
+
+logger:
+  level: "DEBUG"
+
+console:
+  port: 7351
+
+socket:
+  server_key: "warzone_dev_server_key_change_me"
+  port: 7350
+
+session:
+  token_expiry_sec: 7200
+  refresh_token_expiry_sec: 604800
+
+runtime:
+  path: /nakama/data/modules
+  # Custom TypeScript/Go modules land here starting Phase 5
+  # (server/modules/*). Empty on purpose in Phase 2.
+  env:
+    # Replace with your real Firebase project ID (Firebase console →
+    # Project settings → General → "Project ID"). This is NOT a
+    # secret by itself (it's public in every ID token), but it still
+    # doesn't belong hardcoded in server source — see ADR-0004.
+    - "FIREBASE_PROJECT_ID=your-firebase-project-id"

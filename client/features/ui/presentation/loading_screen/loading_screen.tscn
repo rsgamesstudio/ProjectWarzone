@@ -1,0 +1,65 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://features/ui/presentation/loading_screen/loading_screen.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/backgrounds/loading_screen_bg.png" id="2"]
+
+[node name="LoadingScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BottomContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -140.0
+offset_left = 80.0
+offset_right = -80.0
+offset_bottom = -60.0
+grow_vertical = 0
+
+[node name="ProgressRow" type="HBoxContainer" parent="BottomContainer"]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="BottomContainer/ProgressRow" unique_name_in_owner="true"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 100.0
+show_percentage = false
+
+[node name="PercentLabel" type="Label" parent="BottomContainer/ProgressRow" unique_name_in_owner="true"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.66, 0.0, 1)
+text = "0%"
+horizontal_alignment = 1
+
+[node name="TipLabel" type="Label" parent="BottomContainer" unique_name_in_owner="true"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.82, 1)
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="TipTimer" type="Timer" parent="." unique_name_in_owner="true"]
+unique_name_in_owner = true

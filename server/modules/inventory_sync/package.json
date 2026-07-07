@@ -1,0 +1,17 @@
+{
+  "name": "warzone-inventory-sync-module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nakama runtime module: currency, inventory items, and equipped loadout slots for Project Warzone.",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --outfile=build/index.js --format=iife --platform=node --target=es2020",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test $(find src -name '*.test.ts')"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "esbuild": "^0.23.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}

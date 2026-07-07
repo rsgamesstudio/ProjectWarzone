@@ -1,0 +1,34 @@
+# Godot 4
+.godot/
+.import/
+export.cfg
+export_presets.cfg
+*.translation
+mono_crash.*.json
+
+# C#
+.mono/
+data_*/
+Generated/
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Env / secrets
+*.env
+client/export/web/firebase_config.js
+.env.*
+secrets.*
+
+# Server (Node/TS for Nakama modules)
+node_modules/
+dist/
+*.log
+
+# Build artifacts
+build/
+bin/
+obj/
